@@ -18,10 +18,10 @@ COUNT = 0
 
 def convert_to_datetime(time):
     global TODAY
-    hour = time[:time.find(":")]
-    min = time[3:time.find(":", 3)]
-    sec = time[6:time.find(".")]
-    return datetime(TODAY.year, TODAY.month, TODAY.day, int(hour), int(min), int(sec))
+    hours = time[:time.find(":")]
+    mins = time[3:time.find(":", 3)]
+    secs = time[6:time.find(".")]
+    return datetime(TODAY.year, TODAY.month, TODAY.day, int(hours), int(mins), int(secs))
 
 # get activity id for the video
 
@@ -53,17 +53,16 @@ def send_video():
             if len(SEND_QUEUE) > 0:
                 videoFile = open(SEND_QUEUE[0]["path"], 'rb')
                 files = {'file': (SEND_QUEUE[0]["filename"], videoFile)}
-                activityId = get_activity(SEND_QUEUE[0]["timestamp"])
-                if activityId == None:
-                    break
-                else:
+                activityId = get_activity(convert_to_datetime(SEND_QUEUE[0]["time"]))
+                print("Video for time:",SEND_QUEUE[0]["time"]," | Activity Id:",activityId)
+                if not activityId == None:
                     data = {"cam_auth_id": CONFIG["cam_auth_id"], "date": str(
                         TODAY.date()), "activityId": activityId}
                     res = ReqPost(url=url, data=data, files=files)
                     videoFile.close()
                     
                     if res.status_code == 200:
-                        print("Video ",SEND_QUEUE[0]["path"]," uploaded successfully.")
+                        print("Video ",SEND_QUEUE[0]["filename"]," uploaded successfully.")
                         
                 remove(SEND_QUEUE[0]["path"])
                 SEND_QUEUE.pop(0)
@@ -94,7 +93,7 @@ def startPiCam():
         video_capture.start_recording(path)
         video_capture.wait_recording(videoTime)
 
-        SEND_QUEUE.append({"timestamp":startTime,"path":path,"filename":filename})
+        SEND_QUEUE.append({"time":t,"path":path,"filename":filename})
         
         while True:
             startTime = datetime.now()
@@ -106,7 +105,7 @@ def startPiCam():
             video_capture.split_recording(path)
             video_capture.wait_recording(videoTime)
             
-            SEND_QUEUE.append({"timestamp":startTime,"path":path,"filename":filename})
+            SEND_QUEUE.append({"time":t,"path":path,"filename":filename})
 
         video_capture.stop_recording()
 
