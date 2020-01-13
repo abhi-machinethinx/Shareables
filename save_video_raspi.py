@@ -10,7 +10,6 @@ CONFIG = {}
 SCHEDULE = []
 SEND_QUEUE = []
 TODAY = None
-COUNT = 0
 
 
 # convert string date time to
