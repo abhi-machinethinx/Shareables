@@ -1,0 +1,13 @@
+{
+    "cam_auth_id": "CAM-AUTH-4542",
+    "classId": "CLS101",
+    "activity": "C:/Users/Admin/Documents/Python_Scripts/Cerberus_V1/local/activity.json",
+    "system_active": "C:/Users/Admin/Documents/Python_Scripts/Cerberus_V1/local/sys_active.json",
+    "data": "data/",
+    "video_length": 12,
+    "api": {
+        "host": "127.0.0.1",
+        "port": "5005",
+        "route": "rcv_video"
+        }
+}
