@@ -20,4 +20,4 @@ api.add_resource(Code_Upload, '/rcv_code')
 
 
 if __name__ == '__main__':
-    app.run(host='172.172.172.122', port='6005')
+    app.run(host='192.168.4.1', port='6005')
